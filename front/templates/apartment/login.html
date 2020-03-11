@@ -1,12 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>login</title>
-</head>
-<body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
+{% extends 'base/front_base.html' %}
+{% block main %}
+    <div class="login-main">
+        <h1>Welcome to the five-star apartment</h1>
+        <div class="form-login">
+            <form action="{% url 'apartment:login' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="referer" value="{{ referer }}">
+                <div class="form-group">
+                    <label for="Usernameoremail">Username/email</label>
+                    <input type="text" required="required" class="form-control" name="usernameoremail" id="Usernameoremail">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" required="required" class="form-control" name="password" id="password">
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" class="form-check-input" name="remember" id="exampleCheck1" value="1">
+                    <label class="form-check-label" for="exampleCheck1">Remember Me</label>
+                    <a href="{% url 'apartment:forgetpwd' %}">Forgot Your password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+        </div>
     </div>
-</body>
-</html>
+        {% if message %}
+        <script>
+            alert('{{ message }}');
+
+        </script>
+        {% endif %}
+{% endblock %}
