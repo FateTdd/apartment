@@ -1,12 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>userinfo</title>
-</head>
-<body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
+{% extends 'base/front_base.html' %}
+{% block link %}
+    <script type="application/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+{% endblock %}
+{% block main %}
+    <div class="Favorites-main">
+{#        <a href="{% url 'apartment:collection' %}"><button type="button" class="btn btn-info">Favorites</button></a>#}
     </div>
+    <div class="info-main">
+        <span>Personal Information:</span>
+        <form action="{% url 'apartment:userinfo' %}" method="post">
+            {% csrf_token %}
+          <div class="form-group row">
+
+                <label for="inputUsername" class="col-sm-3 col-form-label">Username :</label>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control inputinfo" name="username" id="inputUsername" value="{{ data.username }}">
+                </div>
+
+                <label for="inputEmail" class="col-sm-3 col-form-label">email :</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control inputinfo" name="email" id="inputEmail" value="{{ data.email }}">
+                </div>
+
+                <label for="inputAddress" class="col-sm-3 col-form-label">address :</label>
+                <div class="col-sm-9">
+                  <input type="text" class="form-control inputinfo" name="address" id="inputAddress" value="{{ data.address }}">
+                </div>
+                <div class="info-button">
+                    <button type="submit" class="btn btn-primary">Submit revision</button>
+                </div>
+          </div>
+        </form>
+    </div>
+
 </body>
-</html>
+{% endblock %}
