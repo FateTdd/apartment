@@ -1,10 +1,44 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>search</title>
-</head>
-<body>
+{% extends 'base/front_base.html' %}
+{% block link %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
 
-</body>
-</html>
+{% endblock %}
+{% block main %}
+<div class="search-main">
+    <h1>The five-star apartment</h1>
+    <form action="{% url 'apartment:search' %}" method="post">
+        {% csrf_token %}
+        <div class="input-group" style="z-index:9999">
+          <input type="text" required="required" class="form-control" name="searchtext"  aria-describedby="button-addon2" id="searchtext">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary btn-dark" type="submit" id="button-addon2">Search</button>
+          </div>
+    </div>
+    </form>
+        <div class="pre_banner_3d">
+            <div class="banner_tree">
+                <div class="left_btn color_font">&lt;</div>
+                <div class="right_btn color_font">&gt;</div>
+                <ul class="show_s_ui">
+                    {% for data in data.data_list %}
+                        <li>
+
+                        <a href="../apartment/{{ data.id }}">{{data.name}}</a>
+                        <img src="{% static 'img/'|add:data.img %}" data-url="../apartment/{{ data.id }}" alt="">
+
+                    </li>
+
+                    {% endfor %}
+
+
+                </ul>
+            </div>
+        </div>
+
+        <script src="{% static 'js/jquery.min.js' %}"></script>
+        <script src="{% static 'js/index.js' %}"></script>
+
+</div>
+
+{% endblock %}
