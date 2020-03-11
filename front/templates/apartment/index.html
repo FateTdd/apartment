@@ -1,12 +1,125 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>index</title>
-</head>
-<body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
+{% extends 'base/front_base.html' %}
+{% block title %}
+    apartment
+{% endblock %}
+{% block link %}
+        <script type="application/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+{% endblock %}
+{% block search %}
+    <div class="search">
+        <a href="{% url 'apartment:search' %}"><img src="{% static 'img/search.png' %}" alt="..."></a>
     </div>
-</body>
-</html>
+{% endblock %}
+{% block main %}
+<div class="container-fiuled">
+        <div class="row">
+            <div class="left col-8">
+                <div class="left-main">
+                    <div class="left-carousel">
+                        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                          <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                              {% for x in data.img_index %}
+                                  <li data-target="#carouselExampleIndicators" data-slide-to="{{ x }}"></li>
+                              {% endfor %}
+                          </ol>
+                          <div class="carousel-inner">
+                              {% for img in data.img|slice:":1" %}
+                                 <div class="carousel-item active">
+                                    <img src="{% static "img/"|add:img %}" class="d-block w-100" alt="...">
+                                 </div>
+                              {% endfor %}
+                              {% for img in data.img|slice:"1:" %}
+                                  <div class="carousel-item">
+                                    <img src="{% static "img/"|add:img %}" class="d-block w-100" alt="...">
+                                  </div>
+                              {% endfor %}
+                          </div>
+                          <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                          </a>
+                        </div>
+                    </div>
+                    <div class="left-desc">
+                        <span class="tag">Name: </span><span class="name">{{ data.name }}</span><br>
+                        <span class="tag">Price: </span><span class="price">{{ data.price }}</span><br>
+                        <span class="tag">Apartment information: </span><span class="apartment">{{ data.information }}</span><br>
+                        <span class="tag">Facilities: </span><span class="facilities">{{ data.facilities }}</span><br>
+                        <span class="tag">The rent includes: </span><span class="rent">{{ data.rent_includes }}</span><br>
+                        <span class="tag">Address: </span><span class="address">{{ data.address }}</span>
+                    </div>
+                    <a href="{{ data.address_link }}" class="address-link">Click here to see the address</a>
+                </div>
+            </div>
+            <div class="right col-4">
+                <div class="right-main">
+                    <div class="right-collection">
+                        {% if data.favorite %}
+                            <button type="button" id="collection" class="btn btn-primary is-favorite">Cancel collection</button>
+                        {% else %}
+                            <button type="button" id="collection" class="btn btn-primary">Join the collection</button>
+                        {% endif %}
+                        <script>
+                            $("button#collection").click(function(){
+                              $.get("../../collect/",function(data,status){
+                                  if(data!='Not logged'){
+                                      if(data=='Save success'){
+                                      $("button#collection").text("Cancel collection");
+                                      $("button#collection").addClass("is-favorite");
+                                      }else{
+                                          $("button#collection").text("Join the collection");
+                                          $("button#collection").removeClass("is-favorite");
+                                      }
+                                      alert(data);
+                                  }else{
+                                      window.location.href = '../../login'
+                                  }
+                              });
+                            });
+                        </script>
+                    </div>
+                    <div class="right-star">
+                        <ul>
+                            {% for x in data.range %}
+                                {% if x <= data.score %}
+                                    <li class="yellowstar"></li>
+                                    {% else %}
+                                    <li class="white"></li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <div class="right-comments">
+                        <h2>comments</h2>
+                        <div class="comments">
+                            {{ data.comments }}
+                        </div>
+
+                    </div>
+<a style="display: block; height: 40px" href="{% url 'apartment:evaluation' %}"><button type="button" class="btn btn-primary review">Participate in review</button></a>
+                    <details class="commentcontrol">
+                    <summary>User evaluation</summary>
+                    <div class="commentheight">
+                    <div class="usercomment">
+                        {% for data in data.commenttext %}
+                            <img src="{% static 'img/user.png' %}" alt="" class="avatar"> <span style="color: #6c757d">{{data.user}}</span>
+                            <div class="commenttext">
+                                <span class="displaytext">{{ data.commenttext }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    </div>
+                    </details>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="application/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endblock %}
