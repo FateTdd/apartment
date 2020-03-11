@@ -1,12 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>searchResult</title>
-</head>
-<body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
+{% extends 'base/front_base.html' %}
+{% block link %}
+            <script type="application/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+{% endblock %}
+{% block main %}
+<div class="collection-main">
+    <h2 class="resulttext">{{ data.resulttext }}</h2>
+    <div class="collection-list">
+        <ul>
+            {% for data in data.data_list %}
+                <li>
+                    <img src="{% static 'img/'|add:data.img %}" alt="" class="apartment-img">
+                    <div class="collection-mid">
+                        <a href="{{ '../apartment/'|add:data.id }}">{{ data.name }}</a>
+                        <div class="collection-desc">
+                            <span class="displaytext"><b>price:</b> {{ data.price }}<br></span>
+                            <span class="displaytext"><b>facilities:</b> {{ data.facilities }}<br></span>
+                            <span class="displaytext"><b>environment:</b> {{ data.information}}<br></span>
+                        </div>
+                    </div>
+                    <div class="collection-last">
+                        <div class="right-star searchstar">
+                            <ul>
+                            {% for x in data.range %}
+                                {% if x < data.score %}
+                                    <li class="yellowstar"></li>
+                                    {% else %}
+                                    <li class="white"></li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                        </div>
+
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
     </div>
-</body>
-</html>
+</div>
+{% endblock %}
