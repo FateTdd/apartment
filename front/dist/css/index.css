@@ -6,6 +6,7 @@ body{
     background-repeat:no-repeat;
     background-attachment:fixed;
     background-size:cover;
+
 }
 
 .main{
@@ -364,10 +365,10 @@ h5{
 
 .displaytext{
      overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
+    text-overflow: ellipsis; /* 文本溢出时显示省略号来代表被修剪的文本 */
+    display: -webkit-box; /* 必须结合的属性 ，将对象作为弹性伸缩盒子模型显示 */
+    -webkit-box-orient: vertical; /* 必须结合的属性 ，设置或检索伸缩盒对象的子元素的排列方式 */
+    -webkit-line-clamp: 2; /* 文本需要显示多少行 */
     line-height: 20px;
 
 }
