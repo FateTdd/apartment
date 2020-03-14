@@ -17,7 +17,7 @@ $(function(){
     if(sum_li>=5){
         $(".show_s_ui>li:last-child").attr("id","left_shows");
     }
-
+    //Judge whether to linefeed or not, if it is a new line, move it forward; this function (using flexbox layout) does not support ie9 and below, ie9 uses a flowLayout
     var mg_top=parseFloat($(".nav_banners>li").css("margin-top"));
     var mg_bottom=parseFloat($(".nav_banners>li").css("margin-bottom"));
     var li_padd_t=parseFloat($(".nav_banners>li").css("padding-top"));
@@ -29,17 +29,17 @@ $(function(){
         $(".pre_banner_3d").height($(".contrves").height()+$(".banner_tree").height());
         $(".nav_banners").css("-webkit-box-pack","start").css("-ms-flex-pack","start").css("justify-content","flex-start");
     }
-    var middel_width=$("#middel_shows").width();
-    var middel_hright=$("#middel_shows").height();
-    var slet_width=$("#right_shows").width();
-    var slet_height=$("#right_shows").height();
-    var cster_width=$("#small_right").width();
-    var cster_height=$("#small_right").height();
-    var pos_left_1=$("#middel_shows").css("left");
-    var pos_left_2=$("#right_shows").css("left");
-    var pos_left_3=$("#small_right").css("left");
-    var pos_left_4=$("#left_shows").css("left");
-    var pos_left_5=$("#small_left").css("left");
+    var middel_width=$("#middel_shows").width();//Width shown in the middle 
+    var middel_hright=$("#middel_shows").height();//High shown in the middle 
+    var slet_width=$("#right_shows").width();//Width shown on both sides
+    var slet_height=$("#right_shows").height();//High shown on both sides
+    var cster_width=$("#small_right").width();//Outermost width
+    var cster_height=$("#small_right").height();//Outermost height 
+    var pos_left_1=$("#middel_shows").css("left");//Middle left offset
+    var pos_left_2=$("#right_shows").css("left");//Right left offset
+    var pos_left_3=$("#small_right").css("left");//Rightmost left offset量
+    var pos_left_4=$("#left_shows").css("left");//Left left offset
+    var pos_left_5=$("#small_left").css("left");//Leftmost left offset
     var counts=1,lerts,rierts,fourts,five;
     //Variables in the following table of items if the rotations are greater than 5；
     if(sum_li>=5){
@@ -49,9 +49,9 @@ $(function(){
         five=sum_li;
     }
     //====================================================
-    var secend=150;//Animation delay time
+    var secend=150;//animation-delay time
     if($(window).width()<521){secend=300}
-    var scentimer=4000;//Timer interval time
+    var scentimer=4000;//Timer interval
     var timers=setInterval(auto_play_tree,scentimer);
     var ares=counts+1,ares2=counts;
     if(sum_li==4){ares=counts+2}
@@ -64,7 +64,7 @@ $(function(){
         $($(".show_s_ui>li")[fourts]).css("display","block");
         $($(".show_s_ui>li")[five]).css("display","block");
     }
-
+    //Left click on the control to start=========================================
     function left_btn(){
         $(this).off("click");
         if(sum_li==2){
@@ -106,8 +106,8 @@ $(function(){
             dis_bloc()
             animating(counts,cster_width,cster_height,pos_left_3,"0");//1
             animating(lerts,cster_width,cster_height,pos_left_5,"0");//2
-            animating(rierts,slet_width,slet_height,pos_left_4,"0.6");
-            animating(fourts,middel_width,middel_hright,pos_left_1,"1");
+            animating(rierts,slet_width,slet_height,pos_left_4,"0.6");//the second to last
+            animating(fourts,middel_width,middel_hright,pos_left_1,"1");//the last one
             animating(five,slet_width,slet_height,pos_left_2,"0.6");//0
             lerts--;
             rierts--;
@@ -125,7 +125,8 @@ $(function(){
         },secend);
     }
     $(".left_btn").on("click",left_btn);
-
+    //Left click on control to end=========================================
+    //Right click on control to start==========================================
     function right_btn(){
         $(this).off("click");
         auto_play_tree();
@@ -134,13 +135,15 @@ $(function(){
         },secend);
     }
     $(".right_btn").on("click",right_btn);
-
+    //Right click space ends=======================================
     $(".color_font").mouseenter(function(){
+        //mouse enter control clear Interval timer
         clearInterval(timers);
     }).mouseleave(function(){
+        //mouse leave control set Interval timer
         timers=setInterval(auto_play_tree,scentimer);
     });
-
+    //Animation function start========================================
     function animating(number,width,height,lefts,opacitting){
         $($(".show_s_ui>li")[number]).animate({
             width:width+"px",
@@ -149,7 +152,8 @@ $(function(){
             opacity:opacitting,
         },secend);
     }
-
+    //Animation function end=========================================
+    //Carousel navigation bar display=======================================
     $(".nav_banners>li").click(function(){
         clearInterval(timers);
         counts=$(this).index();
@@ -172,7 +176,8 @@ $(function(){
 
         timers=setInterval(auto_play_tree,scentimer)
     })
-
+    //Carousel navigation bar end=======================================
+    //Carousel function start=========================================
     function auto_play_tree(){
         if(sum_li==2){
             if(counts>=2){counts=0;}else if(counts<0){counts=sum_li-1}
@@ -213,8 +218,8 @@ $(function(){
             dis_bloc();
             animating(counts,middel_width,middel_hright,pos_left_1,"1");//1
             animating(lerts,slet_width,slet_height,pos_left_2,"0.6");//2
-            animating(rierts,cster_width,cster_height,pos_left_3,"0");
-            animating(fourts,cster_width,cster_height,pos_left_5,"0");
+            animating(rierts,cster_width,cster_height,pos_left_3,"0");//the second to last
+            animating(fourts,cster_width,cster_height,pos_left_5,"0");//last one
             animating(five,slet_width,slet_height,pos_left_4,"0.6");//0
             lerts++;
             rierts++;
@@ -228,13 +233,14 @@ $(function(){
         ares2++;
         if(ares>=sum_li){ares=0}else if(ares<0){ares=sum_li-1}
     }
-
+    //Carousel function end=========================================================
+    //Stop timer if there is only one picture; clear all control events
     if(sum_li<2){
         clearInterval(timers);
         $(".nav_banners>li").off();
         $(".color_font").off();
     }
-
+    //enter the carousel to stop the timer, hide the introduction (DIV) display, and leave the start timer；
     $(".show_s_ui>li").mouseenter(function(){
         clearInterval(timers);
         $(this).children("div").css("display","block");

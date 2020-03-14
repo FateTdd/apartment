@@ -17,7 +17,25 @@
           </div>
         </div>
     </form>
+        <div class="pre_banner_3d">
+            <div class="banner_tree">
+                <div class="left_btn color_font">&lt;</div>
+                <div class="right_btn color_font">&gt;</div>
+                <ul class="show_s_ui">
+                    {% for data in data.data_list %}
+                        <li>
 
+                        <a href="../apartment/{{ data.id }}">{{data.name}}</a>
+                        <img src="{% static 'img/'|add:data.img %}" data-url="../apartment/{{ data.id }}" alt="">
+
+                    </li>
+
+                    {% endfor %}
+                    
+
+                </ul>
+            </div>
+        </div>
 
         <script src="{% static 'js/jquery.min.js' %}"></script>
         <script src="{% static 'js/index.js' %}"></script>
