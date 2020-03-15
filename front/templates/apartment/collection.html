@@ -1,12 +1,10 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>collection</title>
-</head>
-<body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
-    </div>
-</body>
-</html>
+{% extends 'base/front_base.html' %}
+{% block link %}
+            <script type="application/javascript" src="{% static 'js/jquery.min.js' %}"></script>
+{% endblock %}
+{% block main %}
+<div class="collection-main">
+    <h1>Your favorite</h1>
+    
+</div>
+{% endblock %}
