@@ -2,11 +2,43 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>changepwd</title>
+    <title>Forget password</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static  'css/bootstrap.min.css'%}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+
 </head>
 <body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
+
+        <div class="login-main">
+        <h1>Forget password</h1>
+        <div class="form-login">
+            <form action="{% url 'apartment:forgetpwd' %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" required="required" class="form-control" name="username" id="username">
+                    <label for="email">email</label>
+                    <input type="text" required="required" class="form-control" name="email" id="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" required="required" class="form-control" name="password" id="password">
+                    <label for="password2">Confirm Password</label>
+                    <input type="password" required="required" class="form-control" name="password2" id="password2">
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
     </div>
+        {% if message %}
+            <script>
+                alert('{{ message }}');
+
+            </script>
+        {% endif %}
+
+
+
 </body>
 </html>

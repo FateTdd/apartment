@@ -31,7 +31,58 @@
                 </div>
           </div>
         </form>
-    </div>
+        <form id="fm">
+            {% csrf_token %}
+            <span>Change Password:</span>
+          <div class="form-group row">
 
-</body>
+                <label for="oldpwd" class="col-sm-3 col-form-label">Old password :</label>
+                <div class="col-sm-9">
+                    <input type="text" required="required" class="form-control inputinfo" name="oldpwd" id="oldpwd">
+                </div>
+
+                <label for="newpwd"  class="col-sm-3 col-form-label">New Password :</label>
+                <div class="col-sm-9">
+                  <input type="text" required="required" class="form-control inputinfo" name="newpwd" id="newpwd">
+                </div>
+                <label for="Confirmpwd" class="col-sm-3 col-form-label">Confirm Password :</label>
+                <div class="col-sm-9">
+                  <input type="text" required="required" class="form-control inputinfo" name="Confirmpwd" id="Confirmpwd">
+                </div>
+
+          </div>
+        </form>
+    <div class="info-button">
+                    <button class="btn btn-primary" id="changepwd">Change Password</button>
+                    <script>
+                        $(function()
+                        {
+                            $('#changepwd').click(function () {
+                                $.ajax({
+                                    url: {% url 'apartment:changepwd' %},
+                                    type: 'POST',
+                                    dataType: 'JSON',
+                                    data: $('#fm').serialize(),
+                                    success: function (arg) {
+                                        if (arg.status == 200) {
+                                            alert(arg.message)
+                                        }else{
+                                            console.log(arg.message);
+                                            $("#msg").html(arg.message);
+                                        }
+                                    }
+                                })
+
+                            })
+
+                        })
+                    </script>
+                </div>
+
+    </div>
+        {% if data.message %}
+        <script>
+            alert('{{ data.message }}');
+        </script>
+        {% endif %}
 {% endblock %}
