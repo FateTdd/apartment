@@ -1,12 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>evaluation</title>
-</head>
-<body>
-    <div>
-        <strong>{{ boldmessage }}</strong><br />
+{% extends 'base/front_base.html' %}
+{% block title %}
+    Evaluation
+{% endblock %}
+{% block main %}
+    <div class="evaluation-main">
+        <h1>{{ data.apartment_name }}</h1>
+        <h4 style="color: yellow">Please make fair evaluation of {{ data.apartment_name }} to help other students better</h4>
+        <div class="evaluation">
+            <form action="{% url 'apartment:evaluate' %}" method="post">
+                {% csrf_token %}
+            <div class="score">
+                <div class="input-div">
+                    <input type="hidden" name="evaluate" value="{{ data.apartment_id }}">
+                    <span>Environment:</span>
+                    <input type="number" name="evaluate" step="1" min="1" max="5" value="5"/>
+                </div>
+                <div class="input-div">
+                    <span>Staff service:</span>
+                    <input type="number" name="evaluate" step="1" min="1" max="5" value="5"/>
+                </div>
+                <div class="input-div">
+                    <span>security:</span>
+                    <input type="number" name="evaluate" step="1" min="1" max="5" value="5"/>
+                </div>
+                <div class="input-div">
+                    <span>Cost performance:</span>
+                    <input type="number" name="evaluate" step="1" min="1" max="5" value="5"/>
+                </div>
+            </div>
+
+            </form>
+        </div>
     </div>
-</body>
-</html>
+{% endblock %}
