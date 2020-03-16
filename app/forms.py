@@ -20,3 +20,9 @@ class User(forms.Form, FormMixin):
     username = forms.CharField(max_length=50)
     email = forms.EmailField(max_length=60)
     password = forms.CharField(max_length=20, min_length=6)
+
+
+class ChangeInfo(forms.Form, FormMixin):
+    username = forms.CharField(max_length=50)
+    email = forms.EmailField(max_length=60)
+    address = forms.CharField(max_length=200)
