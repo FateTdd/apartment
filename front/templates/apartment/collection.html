@@ -19,7 +19,17 @@
                         </div>
                     </div>
                     <div class="collection-last">
-
+                        <div class="right-star">
+                            <ul>
+                            {% for x in data.range %}
+                                {% if x <= data.score %}
+                                    <li class="yellowstar"></li>
+                                    {% else %}
+                                    <li class="white"></li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
+                        </div>
                         <button type="button" class="btn btn-secondary" id="favorite">Cancel the collection</button>
                         <script>
                             $("button#favorite").click(function(){
