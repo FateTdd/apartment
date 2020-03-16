@@ -5,6 +5,41 @@
 {% block main %}
 <div class="collection-main">
     <h1>Your favorite</h1>
-    
+    <div class="collection-list">
+        <ul>
+            {% for data in data.data_list %}
+                <li>
+                    <img src="{% static 'img/'|add:data.img %}" alt="" class="apartment-img">
+                    <div class="collection-mid">
+                        <a href="{{ '../apartment/'|add:data.id }}">{{ data.name }}</a>
+                        <div class="collection-desc">
+                            <span class="displaytext"><b>price:</b> {{ data.price }}<br></span>
+                            <span class="displaytext"><b>facilities:</b> {{ data.facilities }}<br></span>
+                            <span class="displaytext"><b>environment:</b> {{ data.information}}<br></span>
+                        </div>
+                    </div>
+                    <div class="collection-last">
+
+                        <button type="button" class="btn btn-secondary" id="favorite">Cancel the collection</button>
+                        <script>
+                            $("button#favorite").click(function(){
+                              $.get("{{ '../cancelcollect/'|add:data.id }}",function(data,status){
+                                  if(data=='Save success'){
+                                      $("button#favorite").text("Cancel the collection");
+                                      $("button#favorite").removeClass("is-favorite1");
+                                  }else{
+                                      $("button#favorite").text("Join the collection");
+                                      $("button#favorite").addClass("is-favorite1");
+                                  }
+                                  alert(data);
+                              });
+                            });
+                        </script>
+
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
 </div>
 {% endblock %}
