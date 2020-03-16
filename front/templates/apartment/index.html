@@ -45,9 +45,7 @@
                           </a>
                         </div>
                     </div>
-
-                </div>
-                      <div class="left-desc">
+                    <div class="left-desc">
                         <span class="tag">Name: </span><span class="name">{{ data.name }}</span><br>
                         <span class="tag">Price: </span><span class="price">{{ data.price }}</span><br>
                         <span class="tag">Apartment information: </span><span class="apartment">{{ data.information }}</span><br>
@@ -56,6 +54,7 @@
                         <span class="tag">Address: </span><span class="address">{{ data.address }}</span>
                     </div>
                     <a href="{{ data.address_link }}" class="address-link">Click here to see the address</a>
+                </div>
             </div>
             <div class="right col-4">
                 <div class="right-main">
@@ -102,10 +101,7 @@
                         </div>
 
                     </div>
-
-
-
-                                    <a style="display: block; height: 40px" href="{% url 'apartment:evaluation' %}"><button type="button" class="btn btn-primary review">Participate in review</button></a>
+<a style="display: block; height: 40px" href="{% url 'apartment:evaluation' %}"><button type="button" class="btn btn-primary review">Participate in review</button></a>
                     <details class="commentcontrol">
                     <summary>User evaluation</summary>
                     <div class="commentheight">
