@@ -44,7 +44,7 @@ def apartment(request):
     return HttpResponse("Apartment page!")
 
 
-def collection(request):
+def collection(request, loginuser):
     if loginuser:
         user_favorites = ast.literal_eval(User.objects.get(username=loginuser).favorite)
         apartment_list = apartment.objects.filter(id__in=user_favorites)
@@ -65,7 +65,7 @@ def collection(request):
         return render(request, 'apartment/collection.html', {"data": data})
     return render(request, 'apartment/login.html')
 
-def collect(request):
+def collect(request, loginuser):
     if loginuser is None:
         return HttpResponse(status=200, content='Not logged')
     referer = request.META['HTTP_REFERER']
@@ -82,8 +82,19 @@ def collect(request):
     obj.save()
     return HttpResponse(status=200, content="Cancel success")
 
-def cancelcollect(request):
-    return HttpResponse("cancelcollect page!")
+def cancelcollect(request, apartmentid, loginuser):
+    apartmentid = str(apartmentid)
+    obj = User.objects.get(username=loginuser)
+    favorite_list = ast.literal_eval(obj.favorite)
+    if apartmentid not in favorite_list:
+        favorite_list.append(apartmentid)
+        obj.favorite = str(favorite_list)
+        obj.save()
+        return HttpResponse(status=200, content="Save success")
+    favorite_list.remove(apartmentid)
+    obj.favorite = str(favorite_list)
+    obj.save()
+    return HttpResponse(status=200, content="Cancel success")
 
 def login(request):
     return HttpResponse("login page!")
@@ -114,5 +125,36 @@ def changepwd(request):
 def forgetpwd(request):
     return HttpResponse("forgetpwd page!")
 
-def search(request):
-    return HttpResponse("search page!")
+def search(request, loginuser):
+    if request.method == "POST":
+        searchtext = request.POST.get("searchtext")
+        search_list = apartment.objects.filter(name__contains=searchtext)
+        resulttext = 'Search result:'
+        if not search_list.exists():
+            search_list = apartment.objects.filter(id__lt=6)
+            resulttext = 'No search results, recommended for you'
+        data_list = []
+        for x in search_list:
+            data_list.append({
+                "id": str(x.id),
+                "img": ast.literal_eval(x.img)[0],
+                "name": x.name,
+                "facilities": x.facilities,
+                "rent_includes": x.rent_includes,
+                "score": x.score,
+                "information": x.information,
+                "price": x.price,
+                "range": [0, 1, 2, 3, 4]
+            })
+        data = {"loginuser": loginuser, "data_list": data_list, "resulttext": resulttext}
+        return render(request, 'apartment/searchresult.html', {"data": data})
+    apartment_list = apartment.objects.filter(id__lt=6)
+    data_list = []
+    for data in apartment_list:
+        data_list.append({
+            "id": str(data.id),
+            "name": data.name,
+            "img":  ast.literal_eval(data.img)[0]
+        })
+    data = {"data_list": data_list, "loginuser": loginuser}
+    return render(request, 'apartment/search.html', {"data": data})
