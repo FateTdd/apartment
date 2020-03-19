@@ -97,16 +97,49 @@ def cancelcollect(request, apartmentid, loginuser):
     return HttpResponse(status=200, content="Cancel success")
 
 def login(request):
-    return HttpResponse("login page!")
+    referer = request.META['HTTP_REFERER']
+    if request.method == 'POST':
+        referer = request.POST['referer']
+        if referer == '' or request.path in referer:
+            referer = '/search'
+        user = request.POST['usernameoremail']
+        password = request.POST['password']
+        remember = request.POST.getlist("remember")
+        result = User.objects.filter(username=user, password=password)
+        if not result:
+            return render(request, 'apartment/login.html', {'message': 'Wrong username/email or password'})
+        else:
+            request.session['user'] = result[0].uid
+            if remember:
+                request.session.set_expiry(None)
+            else:
+                request.session.set_expiry(0)
+            return HttpResponseRedirect(referer)
+    return render(request, 'apartment/login.html', {'referer': referer})
 
 def logout(request):
-    return HttpResponse("logout page!")
+    request.session.flush()
+    return HttpResponse(status=200, content='Log out success!')
 
-def evaluation(request):
-    return HttpResponse("evaluation page!")
+def evaluation(request, loginuser):
+    referer = request.META['HTTP_REFERER']
+    apartmentid = referer.split('/')[-2]
+    apartment_name = apartment.objects.get(id=apartmentid).name
+    if loginuser is None:
+        return render(request, 'apartment/evaluation.html')
+    data = {'loginuser': loginuser, 'apartment_name': apartment_name, 'apartment_id': apartmentid}
+    return render(request, 'apartment/evaluation.html', {"data": data})
 
-def evaluate(request):
-    return HttpResponse("evaluate page!")
+def evaluate(request, loginuser):
+    loginuser = loginuser
+    uid = User.objects.get(username=loginuser).uid
+    evaluate_list = request.POST.getlist('evaluate')
+    evaluate_content = request.POST.get('evaluatecontent')
+    obj = evaluationobj(apartment_id=evaluate_list[0], user_id=uid, environment=evaluate_list[1]
+                        , staff_service=evaluate_list[2],security=evaluate_list[3]
+                        , cost_performance=evaluate_list[4], comment=evaluate_content)
+    obj.save()
+    return HttpResponseRedirect('../apartment/{}'.format(evaluate_list[0])) 
 
 def registerview(request):
     return HttpResponse("registerview page!")
