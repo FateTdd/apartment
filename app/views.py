@@ -2,6 +2,7 @@ from django.shortcuts import render
 
 # Create your views here.
 import ast
+import json
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -13,8 +14,15 @@ from .models import evaluation as evaluationobj
 
 
 
-def index(request):
-    return HttpResponse("Main page!")
+def checkLogin(func):
+    def warpper(request, *args, **kwargs):
+        if request.session.get('user', False):
+            kwargs["loginuser"] = User.objects.get(uid=request.session.get('user'))
+            return func(request, *args, **kwargs)
+        else:
+            kwargs['loginuser'] = None
+            return func(request, *args, **kwargs)
+    return warpper
 
 def apartmentview(request, loginuser, apartmentid=1):
     favorite = False
@@ -142,7 +150,7 @@ def evaluate(request, loginuser):
     return HttpResponseRedirect('../apartment/{}'.format(evaluate_list[0]))
 
 def registerview(request):
-    return HttpResponse("registerview page!")
+    return render(request, 'apartment/signin.html')
 
 def register(request):
     if request.method == 'POST':
@@ -161,8 +169,7 @@ def register(request):
             return render(request, 'apartment/signin.html', {'message': message})
     return render(request, 'apartment/signin.html', {'message': 'Registered failed'})
 
-
-def userinfo(request):
+def userinfo(request, loginuser, message=None):
     if request.method == "POST":
         form = ChangeInfo(request.POST)
         if form.is_valid():
@@ -186,7 +193,7 @@ def userinfo(request):
     return render(request, 'apartment/userinfo.html', {"data": data})
 
 
-def changepwd(request):
+def changepwd(request, loginuser):
     oldpwd = request.POST['oldpwd']
     newpwd = request.POST['newpwd']
     Confirmpwd = request.POST['Confirmpwd']
@@ -203,7 +210,22 @@ def changepwd(request):
         return HttpResponse(json.dumps({'status': 200, 'message': 'Input cannot be empty!'}))
 
 def forgetpwd(request):
-    return HttpResponse("forgetpwd page!")
+    if request.method == "POST":
+        form = FUser(request.POST)
+        if request.POST['password'] != request.POST["password2"]:
+            return render(request, 'apartment/changepwd.html', {'message': 'Two passwords are different'})
+        if form.is_valid():
+            user = User.objects.filter(username=request.POST['username'], email=request.POST["email"])
+            if user.exists():
+                changeuser = user[0]
+                changeuser.password = request.POST['password']
+                changeuser.save()
+                return render(request, 'apartment/login.html')
+        else:
+            error = form.get_errors()
+            message = ''.join([x + ':' + error[x][0] for x in error.keys()])
+            return render(request, 'apartment/changepwd.html', {'message': message})
+    return render(request, 'apartment/changepwd.html')
 
 def search(request, loginuser):
     if request.method == "POST":
