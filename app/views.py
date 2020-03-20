@@ -139,21 +139,68 @@ def evaluate(request, loginuser):
                         , staff_service=evaluate_list[2],security=evaluate_list[3]
                         , cost_performance=evaluate_list[4], comment=evaluate_content)
     obj.save()
-    return HttpResponseRedirect('../apartment/{}'.format(evaluate_list[0])) 
+    return HttpResponseRedirect('../apartment/{}'.format(evaluate_list[0]))
 
 def registerview(request):
     return HttpResponse("registerview page!")
 
 def register(request):
-    return HttpResponse("register page!")
+    if request.method == 'POST':
+        if User.objects.filter(username=request.POST.get('username')).count():
+            return render(request, 'apartment/signin.html', {'message': 'The user already exists'})
+        form = FUser(request.POST)
+        if request.POST['password'] != request.POST["password2"]:
+            return render(request, 'apartment/signin.html', {'message': 'Two passwords are different'})
+        if form.is_valid():
+            user = User(**form.cleaned_data)
+            user.save()
+            return HttpResponseRedirect('../apartment/1')
+        else:
+            error = form.get_errors()
+            message = ''.join([x + ':' + error[x][0] for x in error.keys()])
+            return render(request, 'apartment/signin.html', {'message': message})
+    return render(request, 'apartment/signin.html', {'message': 'Registered failed'})
 
 
 def userinfo(request):
-    return HttpResponse("userinfo page!")
+    if request.method == "POST":
+        form = ChangeInfo(request.POST)
+        if form.is_valid():
+            user = User.objects.get(username=loginuser)
+            user.username = request.POST["username"]
+            user.email = request.POST['email']
+            user.address = request.POST['address']
+            user.save()
+            message = 'change success'
+        else:
+            error = form.get_errors()
+            message = ''.join([x + ':' + error[x][0] for x in error.keys()])
+    userobj = User.objects.get(username=loginuser)
+    data = {
+        'username': loginuser,
+        'email': userobj.email,
+        'address': userobj.address,
+        'loginuser': loginuser,
+        'message': message
+    }
+    return render(request, 'apartment/userinfo.html', {"data": data})
 
 
 def changepwd(request):
-    return HttpResponse("changepwd page!")
+    oldpwd = request.POST['oldpwd']
+    newpwd = request.POST['newpwd']
+    Confirmpwd = request.POST['Confirmpwd']
+    if oldpwd != '' and newpwd != '' and Confirmpwd != '':
+        if oldpwd != User.objects.get(username=loginuser).password:
+            return HttpResponse(json.dumps({'status': 200, 'message': 'The old password is wrong'}))
+        if newpwd != Confirmpwd:
+            return HttpResponse(json.dumps({'status': 200, 'message': 'Two passwords are different'}))
+        user = User.objects.get(username=loginuser)
+        user.password = newpwd
+        user.save()
+        return HttpResponse(json.dumps({'status': 200, 'message': 'Change success!'}))
+    else:
+        return HttpResponse(json.dumps({'status': 200, 'message': 'Input cannot be empty!'}))
 
 def forgetpwd(request):
     return HttpResponse("forgetpwd page!")
