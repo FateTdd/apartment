@@ -217,10 +217,10 @@ def register(request):
     return render(request, 'apartment/signin.html', {'message': 'Registered failed'})
 
 
-def hash_code(s, salt='mysite'):  # 加点盐
+def hash_code(s, salt='mysite'):
     h = hashlib.sha256()
     s += salt
-    h.update(s.encode())  # update方法只接收bytes类型
+    h.update(s.encode())
     return h.hexdigest()
 
 
