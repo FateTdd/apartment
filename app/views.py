@@ -3,7 +3,7 @@ import json
 import ast
 
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import apartment, User
 from .models import evaluation as evaluationobj
 from .forms import User as FUser
@@ -130,15 +130,18 @@ def search(request, loginuser):
                 "range": [0, 1, 2, 3, 4]
             })
         data = {"loginuser": loginuser, "data_list": data_list, "resulttext": resulttext}
-        return render(request, 'apartment/searchresult.html', {"data": data})
+        if request.session.get('user'):
+            return render(request, 'apartment/searchresult.html', {"data": data})
+        else:
+            return render(request, 'apartment/login.html')
     apartment_list = apartment.objects.filter(id__lt=6)
     data_list = []
     for data in apartment_list:
         data_list.append({
             "id": str(data.id),
             "name": data.name,
-            "img": ast.literal_eval(data.img)[0]
-        })
+        "img": ast.literal_eval(data.img)[0]
+       })
     data = {"data_list": data_list, "loginuser": loginuser}
     return render(request, 'apartment/search.html', {"data": data})
 
@@ -172,14 +175,16 @@ def logout(request):
 
 @checkLogin
 def evaluation(request, loginuser):
-    referer = request.META['HTTP_REFERER']
-    apartmentid = referer.split('/')[-2]
-    apartment_name = apartment.objects.get(id=apartmentid).name
-    if loginuser is None:
-        return render(request, 'apartment/evaluation.html')
-    data = {'loginuser': loginuser, 'apartment_name': apartment_name, 'apartment_id': apartmentid}
-    return render(request, 'apartment/evaluation.html', {"data": data})
-
+    if request.session.get('user'):
+        referer = request.META['HTTP_REFERER']
+        apartmentid = referer.split('/')[-2]
+        apartment_name = apartment.objects.get(id=apartmentid).name
+        if loginuser is None:
+            return render(request, 'apartment/evaluation.html')
+        data = {'loginuser': loginuser, 'apartment_name': apartment_name, 'apartment_id': apartmentid}
+        return render(request, 'apartment/evaluation.html', {"data": data})
+    else:
+        return render(request, 'apartment/login.html')
 
 @checkLogin
 def evaluate(request, loginuser):
