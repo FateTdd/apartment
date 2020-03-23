@@ -37,7 +37,7 @@ $(function(){
     var cster_height=$("#small_right").height();//Outermost height 
     var pos_left_1=$("#middel_shows").css("left");//Middle left offset
     var pos_left_2=$("#right_shows").css("left");//Right left offset
-    var pos_left_3=$("#small_right").css("left");//Rightmost left offset量
+    var pos_left_3=$("#small_right").css("left");//Rightmost left offset
     var pos_left_4=$("#left_shows").css("left");//Left left offset
     var pos_left_5=$("#small_left").css("left");//Leftmost left offset
     var counts=1,lerts,rierts,fourts,five;
