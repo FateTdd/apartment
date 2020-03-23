@@ -131,7 +131,7 @@ def search(request, loginuser):
             })
         data = {"loginuser": loginuser, "data_list": data_list, "resulttext": resulttext}
         if request.session.get('user'):
-            return render(request, 'apartment/searchresult.html', {"data": data})
+            return render(request, 'apartment/searchResult.html', {"data": data})
         else:
             return render(request, 'apartment/login.html')
     apartment_list = apartment.objects.filter(id__lt=6)
