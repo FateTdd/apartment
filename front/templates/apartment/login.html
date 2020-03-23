@@ -15,31 +15,12 @@
                     <label for="password">Password</label>
                     <input type="password" required="required" class="form-control" name="password" id="password">
                 </div>
-
                 <div class="form-group form-check">
                     <input type="checkbox" class="form-check-input" name="remember" id="exampleCheck1" value="1">
                     <label class="form-check-label" for="exampleCheck1">Remember Me</label>
                     <a href="{% url 'apartment:forgetpwd' %}">Forgot Your password?</a>
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
-
-
-
-
-
-                 <a href="{% url 'social:begin' 'google-oauth2' %}">
-                           <button type="button" nmae="button"class="btn btn-danger">Google+ </button>
-                 </a>
-
-                 <a href="{% url 'social:begin' 'github' %}">
-                           <button type="button" nmae="button"class="btn btn-primary">Github </button>
-                 </a>
-
-
-
-
-
-
             </form>
         </div>
     </div>

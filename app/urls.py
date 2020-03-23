@@ -1,12 +1,6 @@
 from django.urls import path
 from app import views
 
-
-
-
-
-
-
 app_name = 'apartment'
 
 urlpatterns = [
@@ -25,8 +19,5 @@ urlpatterns = [
     path('userinfo/', views.userinfo, name='userinfo'),
     path('changepwd/', views.changepwd, name='changepwd'),
     path('forgetpwd/', views.forgetpwd, name='forgetpwd'),
-
-
-    path('', views.index, name='index'),
 
 ]

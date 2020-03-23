@@ -39,9 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'app',
-    # social_django
-    'social_django',
-
 ]
 
 MIDDLEWARE = [
@@ -52,10 +49,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-    # social_django
-    'social_django.middleware.SocialAuthExceptionMiddleware',
-
 ]
 
 ROOT_URLCONF = 'apartment.urls'
@@ -71,10 +64,6 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-
-                # social_django
-                'social_django.context_processors.backends',
-                'social_django.context_processors.login_redirect',
             ],
             'builtins': [
                 'django.templatetags.static'
@@ -90,14 +79,10 @@ WSGI_APPLICATION = 'apartment.wsgi.application'
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
 DATABASES = {
-
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-
     }
-
-
 }
 
 
@@ -142,55 +127,3 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'front', 'dist')
 ]
-
-
-# social_django
-
-AUTHENTICATION_BACKENDS = [
-
-    'social_core.backends.google.GoogleOAuth2',
-
-    'social_core.backends.github.GithubOAuth2',
-
-    'django.contrib.auth.backends.ModelBackend',
-]
-SOCIAL_AUTH_LOGIN_REDIRECT_URL='/'
-#SOCIAL_AUTH_LOGIN_REDIRECT_URL = 'http://127.0.0.1:8000/' # jump url
-# SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/index/'
-#LOGIN_REDIRECT_URL='index'
-
-# GOOGLE
-
-
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '683520808593-r2e34ne80tg8im57dao48sduqc509pn9.apps.googleusercontent.com'  # app id
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '8fELXIu3U6NxOry8t9ItlJvd'  # app key
-
-
-
-#GITHUB
-SOCIAL_AUTH_GITHUB_KEY ='395313703a51ce9f1683'
-SOCIAL_AUTH_GITHUB_SECRET ='261d06552c621c529b0b26b0103d7130d0d13b23'
-SOCIAL_AUTH_GITHUB_USE_OPENID_AS_USERNAME = True
-
-GITHUB_CALLBACK='http;//localhost:8000/github/'
-
-
-
-
-
-
-
-
-SOCIAL_AUTH_PIPELINE = (
-    'social_core.pipeline.social_auth.social_details',
-    'social_core.pipeline.social_auth.social_uid',
-    'social_core.pipeline.social_auth.social_user',
-    'social_core.pipeline.user.get_username',
-    'social_core.pipeline.social_auth.associate_by_email',
-    'social_core.pipeline.user.create_user',
-    'social_core.pipeline.social_auth.associate_user',
-    'social_core.pipeline.social_auth.load_extra_data',
-    'social_core.pipeline.user.user_details',
-
-)
-SESSION_COOKIE_SECURE = False

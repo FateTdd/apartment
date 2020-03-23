@@ -15,15 +15,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls import url, include
 
 from app import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.search, name='search'),
-    path('', include('app.urls')),
-    url(r'^oauth/',include('social_django.urls', namespace='social')),
-    path('login/github/',include('social_django.urls', namespace='social2')),
+    path('', include('app.urls'))
 
 ]

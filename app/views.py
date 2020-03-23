@@ -289,10 +289,3 @@ def forgetpwd(request):
             message = ''.join([x + ':' + error[x][0] for x in error.keys()])
             return render(request, 'apartment/changepwd.html', {'message': message})
     return render(request, 'apartment/changepwd.html')
-
-
-
-
-
-def index(request):
-    return render(request, 'login.html')
